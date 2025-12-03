@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css">
+  <!-- SEO básico -->
+  <title>Zona Abissal — Mar Profundo</title>
+  <meta name="description" content="Explore os mistérios da zona abissal: curiosidades, fatos científicos e imagens de espécies que vivem nas profundezas do oceano." />
+
+  <!-- Bibliotecas -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.8.0/dist/tf.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+</head>
+<body>
+  <div id="topo"></div>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header role="banner">
+    <div class="wrap">
+      <nav aria-label="Navegação principal">
+        <div class="brand" aria-label="Marca da página">
+          <span aria-hidden="true"></span>
+          <strong>Mar Profundo</strong>
+        </div>
+
+        <div class="nav-links" role="navigation">
+          <a href="#curiosidades">Curiosidades</a>
+          <a href="#fatos">Fatos</a>
+          <a href="#galeria">Galeria</a>
+          <a href="#faq">FAQ</a>
+        </div>
+
+        <div class="controls">
+          <button id="toggleTheme" class="btn ghost" aria-pressed="false" aria-label="Alternar modo claro e escuro">🌙</button>
+          <!-- Botão de Abrir Chatbot removido: usaremos apenas o Dialogflow -->
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo" class="wrap" role="main">
+    <!-- HERO -->
+    <section class="hero fade-in" aria-labelledby="titulo-hero">
+      <div>
+        <p class="hero-tag">Tema especial · Zona abissal · Profundezas do oceano</p>
+        <h1 id="titulo-hero">Zona Abissal</h1>
+        <h2>Explorando os mistérios das profundezas, onde quase não há luz, mas a vida continua.</h2>
+        <p>Este site foi criado para revelar o que acontece em uma das regiões mais extremas dos oceanos. Aqui você descobre como os animais sobrevivem à pressão gigante, à escuridão total e à falta de alimento na zona abissal.</p>
+
+        <!-- Mini cards de destaque usando o estilo já existente -->
+        <div class="cards" role="list" aria-label="Dados rápidos sobre a zona abissal" style="margin-top:1rem;">
+          <article class="card" role="listitem">
+            <h3>Profundidade</h3>
+            <p>Começa por volta de 2.000 m e pode ultrapassar os 6.000 m de profundidade.</p>
+          </article>
+          <article class="card" role="listitem">
+            <h3>Temperatura</h3>
+            <p>A água costuma ficar entre 0 ºC e 3 ºC, quase congelando o tempo todo.</p>
+          </article>
+          <article class="card" role="listitem">
+            <h3>Luz</h3>
+            <p>Não entra luz do Sol. A claridade vem apenas da bioluminescência de alguns animais.</p>
+          </article>
+        </div>
+
+        <div class="actions" role="group" aria-label="Ações principais">
+          <!-- Botão obrigatório: Reconhecimento Facial -->
+          <button id="abrirIA" class="btn" aria-label="Iniciar reconhecimento facial">
+            Reconhecimento Facial
+          </button>
+
+          <!-- Botão de Abrir Chatbot removido: usaremos apenas o Dialogflow -->
+        </div>
+      </div>
+      <div class="imgwrap" aria-hidden="false">
+        <!-- Imagem hero temática -->
+        <img
+          src="data:image/jpeg;base64,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"
+          alt="Peixe de águas profundas usando bioluminescência na escuridão da zona abissal" />
+      </div>
+    </section>
+
+    <!-- CURIOSIDADES -->
+    <section id="curiosidades" aria-labelledby="titulo-curiosidades" class="fade-in">
+      <header>
+        <h2 id="titulo-curiosidades">Curiosidades</h2>
+        <p>Descobertas rápidas sobre o mundo escondido nas profundezas.</p>
+      </header>
+      <ul class="facts-list" role="list">
+        <li><div class="text">A zona abissal ocupa mais de 70% da biosfera da Terra, sendo fria, escura e com altíssima pressão — o que a torna pouco explorada.</div></li>
+        <li><div class="text">Apesar das condições extremas, abriga vida adaptada ao ambiente hostil, com olhos grandes ou ausentes e corpos pequenos para sobreviver.</div></li>
+        <li><div class="text">Algumas espécies têm reprodução curiosa, como o macho do diabo-marinho que se funde à fêmea e vive como um parasita sexual.</div></li>
+        <li><div class="text">Muitos animais desta zona usam bioluminescência para atrair presas e parceiros, como a lula-vampiro e o peixe machado-de-prata.</div></li>
+        <li><div class="text">Dentes afiados impedem a fuga das presas, como no peixe-víbora-abissal e no peixe-ogro, que também se alimenta de detritos.</div></li>
+      </ul>
+    </section>
+
+    <!-- FATOS/CIÊNCIA -->
+    <section id="fatos" aria-labelledby="titulo-fatos" class="fade-in">
+      <header>
+        <h2 id="titulo-fatos">Fatos e Ciência</h2>
+        <p>Três pontos científicos para entender melhor esse ambiente extremo.</p>
+      </header>
+      <div class="cards" role="list">
+        <article class="card" aria-label="Fato científico 1" role="listitem">
+          <h3>Pressão extrema</h3>
+          <p>A pressão na zona abissal pode ser mil vezes maior que a da superfície, exigindo adaptações incríveis dos organismos que vivem ali.</p>
+        </article>
+
+        <article class="card" aria-label="Fato científico 2" role="listitem">
+          <h3>Alimentação limitada</h3>
+          <p>Muitos animais dependem de restos de matéria orgânica que caem das camadas superiores, o chamado “neve marinha”.</p>
+        </article>
+
+        <article class="card" aria-label="Fato científico 3" role="listitem">
+          <h3>Bioluminescência</h3>
+          <p>A bioluminescência é usada para caça, defesa e comunicação, funcionando como uma “lanterna natural” na escuridão total.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- GALERIA -->
+    <section id="galeria" aria-labelledby="titulo-galeria" class="fade-in">
+      <header>
+        <h2 id="titulo-galeria">Galeria</h2>
+        <p>Imagens de espécies e representações da zona abissal.</p>
+      </header>
+      <div class="gallery" role="list">
+        <figure role="listitem">
+          <img src="https://s2.glbimg.com/VZ1k7ZGbG4kvsaNlmZaIAYRoBRk=/e.glbimg.com/og/ed/f/original/2020/11/24/manoa-soest-record-fish-deep-sea-2.jpg" alt="Peixe de águas profundas com olhos grandes e corpo alongado" />
+          <figcaption>Peixe de águas profundas adaptado à escuridão e à alta pressão.</figcaption>
+        </figure>
+
+        <figure role="listitem">
+          <img src="https://www.pensamentoverde.com.br/wp-content/uploads/2018/02/img315.jpg" alt="Ilustração de diferentes espécies da zona abissal" />
+          <figcaption>Representação da diversidade de espécies que vivem na zona abissal.</figcaption>
+        </figure>
+
+        <figure role="listitem">
+          <img src="https://p2.trrsf.com/image/fget/cf/940/0/images.terra.com/2025/02/09/peixe2-sobtbhzob1vc.jpg" alt="Peixe com mandíbula grande e dentes afiados" />
+          <figcaption>Predador abissal com dentes afiados para impedir a fuga das presas.</figcaption>
+        </figure>
+
+        <figure role="listitem">
+          <img src="https://conteudo.imguol.com.br/2013/01/23/22jan-2013--blobfish-psychrolutes-marcidus-1358985116262_615x300.jpg" alt="Peixe blobfish de aparência gelatinosa fora d'água" />
+          <figcaption>Blobfish, famoso pela aparência gelatinosa quando está fora de seu habitat de alta pressão.</figcaption>
+        </figure>
+
+        <figure role="listitem">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-1wZE6iG6NGVDqgB4aMiWuZiJBOJljRkqxA&s" alt="Animal marinho bioluminescente em fundo escuro" />
+          <figcaption>Bioluminescência usada para se comunicar e atrair presas na escuridão.</figcaption>
+        </figure>
+
+        <figure role="listitem">
+          <img src="https://static.wixstatic.com/media/e39b30_b493e55b4abb46eb885eedb0a6ddba48~mv2.png/v1/fill/w_940,h_400,al_c,q_90/e39b30_b493e55b4abb46eb885eedb0a6ddba48~mv2.png" />
+          <figcaption>Outro exemplo de espécie adaptada à pressão e à escuridão extremas.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" aria-labelledby="titulo-faq" class="fade-in">
+      <header>
+        <h2 id="titulo-faq">Perguntas Frequentes</h2>
+        <p>Respostas rápidas sobre o projeto e o tema.</p>
+      </header>
+
+      <div class="faq">
+        <details>
+          <summary>O que é a zona abissal?</summary>
+          <p>É a região mais profunda dos oceanos, situada abaixo dos 2.000 metros de profundidade.</p>
+        </details>
+        <details>
+          <summary>Por que ela é tão pouco conhecida?</summary>
+          <p>Devido à extrema pressão, escuridão e dificuldade de acesso, a exploração é limitada.</p>
+        </details>
+        <details>
+          <summary>Existe vida na zona abissal?</summary>
+          <p>Sim. Apesar das condições adversas, há diversas espécies altamente adaptadas.</p>
+        </details>
+        <details>
+          <summary>Como os animais enxergam sem luz?</summary>
+          <p>Alguns têm olhos grandes, outros são cegos, e muitos usam bioluminescência para se orientar.</p>
+        </details>
+        <details>
+          <summary>Como ocorre a reprodução nesse ambiente?</summary>
+          <p>Algumas espécies são hermafroditas, outras mudam de sexo, e há casos extremos de parasitismo sexual.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section id="cta-final" aria-labelledby="titulo-cta" class="fade-in">
+      <header>
+        <h2 id="titulo-cta">Continue explorando</h2>
+        <p>Escolha um caminho para aprender ainda mais.</p>
+      </header>
+      <div class="cta" role="group" aria-label="Call to Action">
+        <a href="#fatos">Aprender mais</a>
+        <a href="#galeria">Ver imagens</a>
+        <a href="#creditos">Baixar material &amp; Fontes</a>
+      </div>
+    </section>
+
+    <!-- CRÉDITOS/FONTES -->
+    <section id="creditos" aria-labelledby="titulo-creditos" class="fade-in">
+      <header>
+        <h2 id="titulo-creditos">Créditos e Fontes</h2>
+        <p>Referências utilizadas neste projeto.</p>
+      </header>
+      <article>
+        <p>[[FONTES_REFERENCIAS]]</p>
+      </article>
+    </section>
+  </main>
+
+  <!-- Painel do Chatbot (Aside fixo) -->
+  <aside id="chatPane" role="complementary" aria-label="Painel do chatbot" aria-hidden="true">
+    <div class="chat-header">
+      <strong>Chatbot Demonstrativo</strong>
+      <div>
+        <button id="closeChat" class="icon-btn" aria-label="Fechar chatbot">✖</button>
+      </div>
+    </div>
+    <div class="chat-body" id="chatHistory" aria-live="polite">
+      <!-- Placeholders de histórico -->
+      <div class="msg bot">Olá! Sou um protótipo de chatbot. Como posso ajudar sobre a Zona Abissal?</div>
+      <div class="msg user">Quero saber curiosidades rápidas.</div>
+      <div class="msg bot">Veja a seção “Curiosidades” ou pergunte algo específico!</div>
+    </div>
+    <form class="chat-input" id="chatForm" aria-label="Entrada de mensagem do chatbot">
+      <input id="chatText" type="text" name="q" placeholder="Digite sua mensagem..." aria-label="Escreva sua mensagem" />
+      <button class="icon-btn" type="submit" aria-label="Enviar mensagem">➤</button>
+    </form>
+  </aside>
+
+  <footer class="wrap" role="contentinfo">
+    <p>&copy; <span id="ano"></span> | Projeto: Zona Abissal — <a href="#topo" id="backToTop">Voltar ao topo</a></p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+
+  <df-messenger
+    intent="WELCOME"
+    chat-title="ECOBOT"
+    agent-id="6c106d6c-eef7-41db-92b4-5bf82848937e"
+    language-code="pt-br">
+  </df-messenger>
+
+  <!-- Modal da câmera -->
+  <div id="cameraModal" class="modal" aria-hidden="true" style="display:none;">
+    <div class="modal-content">
+      <button id="fecharModal" class="botao-fechar" title="Fechar">❌</button>
+      <h2 class="modal-title">Reconhecimento Facial</h2>
+      <div class="video-wrap">
+        <video id="video" autoplay muted playsinline></video>
+      </div>
+      <div class="controls">
+        <button id="tirarFoto" class="botao-foto" title="Tirar foto">📸</button>
+      </div>
+      <p id="modalStatus" class="modal-status">Aguardando...</p>
+      <canvas id="fotoCanvas" style="display:none;"></canvas>
+    </div>
+  </div>
+
+</body>
+</html>
